@@ -1,10 +1,8 @@
 const Discord = require("discord.js");
 
-const TOKEN = " ";
+const bot = new Discord.Client();
 
-var bot = new Discord.Client();
-
-const PREFIX = "!";
+const config = require("./config.json");
 
 bot.on("ready", function(){
 	console.log("Я бот і я тут!")
@@ -13,7 +11,7 @@ bot.on("ready", function(){
 bot.on("message", function(message) {
 	if(message.author.equals(bot.user)) return;
 
-	var args = message.content.substring(PREFIX.length).split(" ");
+	var args = message.content.substring(config.PREFIX.length).split(" ");
 
 	switch(args[0].toLowerCase()) {
 		case "hello":
@@ -23,6 +21,6 @@ bot.on("message", function(message) {
 
 });
 
-bot.login(TOKEN);
+bot.login(config.TOKEN);
 
 
