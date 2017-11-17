@@ -1,5 +1,5 @@
-const config = require("./config.json");
 const Discord = require("discord.js");
+const config = require("./config.json");
 const bot = new Discord.Client({disableEveryone: true});
 const prefix = config.prefix;
 
