@@ -28,7 +28,7 @@ bot.on("message", async message => {
 
     if(message.author.bot) return;
     if(message.channel.type === "dm") return;
-//    if(message.author.id !== config.ownerID) return;
+    if(message.author.id !== config.ownerID) return;
 
     let messageArray = message.content.split(" ");
     let command = messageArray[0];
@@ -42,7 +42,7 @@ bot.on("message", async message => {
             
             .setColor("#00ccff")
             .addField("Користувач #", `${message.author.username}#${message.author.discriminator}`)
-        .setAuthor(message.author.username)
+            .setAuthor(message.author.username)
             .addField("Ідентифікатор", message.author.id)
             .addField("Створено", message.author.createdAt);
         
