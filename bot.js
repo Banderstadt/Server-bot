@@ -17,9 +17,9 @@ bot.on("ready", async () => {
 bot.on("message", async message => {
     if(message.author.bot) return;
     if(message.channel.type === "dm") return;
-    if(message.author.id !== config.ownerID) return; 
+    // if(message.author.id !== config.ownerID) return; 
 
-    let messageArray = message.content.split(" ");
+    let messageArray = message.content.split(/\s+/g);
     let command = messageArray[0];
     let args = messageArray.slice(1);
 
@@ -42,12 +42,13 @@ bot.on("message", async message => {
 
     // Start of the mute user command
     if(command === `${prefix}заглушити`) {
-        if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("У вас не достатньо прав!");
+        if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("У вас недостатньо прав!");
         
         let toMute = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
         if(!toMute) return message.channel.send("Ви не вказалали користувача чи його ідентифікатор");
         
        	if(toMute.id === message.author.id) return message.channel.send("Ви не можете себе заглушити");
+       	if(toMute.highestRole.position >= message.member.highestRole.position) return message.channel.send("Неможливо заглушити користувача з вищим чи таким самим пріоритетом");
         
         let role = message.guild.roles.find(r => r.name === "Заглушені");
         if(!role) {
@@ -100,5 +101,4 @@ bot.on("message", async message => {
 });
 
 bot.login(config.token);
-
 
