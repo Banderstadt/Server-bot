@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const config = require("./config.json");
-const bot = new Discord.Client({disableEveryone: true});
+const bot = new Discord.Client({});
 const prefix = config.prefix;
 
 bot.on("ready", async () => {
@@ -17,7 +17,7 @@ bot.on("ready", async () => {
 bot.on("message", async message => {
     if(message.author.bot) return;
     if(message.channel.type === "dm") return;
-    // if(message.author.id !== config.ownerID) return; 
+    if(message.author.id !== config.ownerID) return message.channel.send("У вас недостатньо прав!"); 
 
     let messageArray = message.content.split(/\s+/g);
     let command = messageArray[0];
@@ -48,7 +48,8 @@ bot.on("message", async message => {
         if(!toMute) return message.channel.send("Ви не вказалали користувача чи його ідентифікатор");
         
        	if(toMute.id === message.author.id) return message.channel.send("Ви не можете себе заглушити");
-       	if(toMute.highestRole.position >= message.member.highestRole.position) return message.channel.send("Неможливо заглушити користувача з вищим чи таким самим пріоритетом");
+       	if(toMute.highestRole.position >= message.member.highestRole.position) return message.channel.send("Ви не можете заглушити користувача з більшим чи таким самим пріоритетом, ніж у вас."); 
+       		
         
         let role = message.guild.roles.find(r => r.name === "Заглушені");
         if(!role) {
@@ -58,8 +59,7 @@ bot.on("message", async message => {
                     color: "#000000",
                     permissions: []
                 });
-            
-                message.guild.channels.forEach(async (channel, id) => {
+                message.guild.channels.forEach(async (channel, id) => { 
                     await channel.overwritePermissions(role, {
                         SEND_MESSAGES: false,
                         ADD_REACTIONS: false
@@ -74,7 +74,6 @@ bot.on("message", async message => {
         
         await toMute.addRole(role);
         message.channel.send("Заглушив зрадників!");
-        
 
         return;
 
@@ -89,7 +88,7 @@ bot.on("message", async message => {
         if(!toMute) return message.channel.send("Ви не вказалали користувача чи його ідентифікатор");
         
         let role = message.guild.roles.find(r => r.name === "Заглушені");
-        if(!role || !toMute.roles.has(role.id)) return message.channel.send("Користувач не є заглушений")
+        if(!role || !toMute.roles.has(role.id)) return message.channel.send("Користувач не є заглушений");
         
         await toMute.removeRole(role);
         message.channel.send("Розглушив зрадників!")
@@ -97,7 +96,6 @@ bot.on("message", async message => {
         return;
     }
     // The end of the unmute command
-    
 });
 
 bot.login(config.token);
