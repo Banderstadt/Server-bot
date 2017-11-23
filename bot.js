@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const config = require("./config.json");
-const bot = new Discord.Client({});
+const bot = new Discord.Client();
 const prefix = config.prefix;
 const fs = require("fs");
 
@@ -47,7 +47,7 @@ bot.on("message", async message => {
     if(message.author.id !== config.ownerID) return message.channel.send("У вас недостатньо прав!");
 
     let messageArray = message.content.split(/\s+/g);
-    let command = messageArray[0];
+    let command = messageArray[0].toLowerCase();
     let args = messageArray.slice(1);
 
     if(!message.content.startsWith(prefix)) return;
@@ -108,7 +108,7 @@ bot.on("message", async message => {
 
         fs.writeFile("./mutes.json", JSON.stringify(bot.mutes, null, 4), err => {
         	if(err) throw err;
-        	message.channel.send("Я заглушив цього зрадника!")
+        	message.channel.send("Я заглушив цього зрадника!");
         });
         
         return;
